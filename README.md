@@ -22,9 +22,21 @@
     ~~~~
     git clone https://github.com/Cerbrus/piholedisplay.git
     ~~~~
+  - Navigate to the `/piholedisplay` folder
+    ~~~~
+    cd piholedisplay/
+    ~~~~
+  - Grant execution permissions to the startup script
+    ~~~~
+    chmod +x start-pihole-stat.sh
+    ~~~~
   - Navigate to the `/python` folder
     ~~~~
-    cd piholedisplay/python/
+    cd python/
+    ~~~~
+  - Create `api-key.txt` containing your pihole API key
+    ~~~~
+    echo "My API key" >> api-key.txt
     ~~~~
   - Run the stats.py script using
     ~~~~

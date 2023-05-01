@@ -4,6 +4,7 @@ After=syslog.target network.target auditd.service
 
 [Service]
 User=pi
+ExecStartPre=/bin/sleep 30
 ExecStart=/home/pi/piholedisplay/start-pihole-stat.sh
 
 [Install]

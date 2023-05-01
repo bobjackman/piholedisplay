@@ -81,7 +81,7 @@ class Stats:
                 domains, ads = IO.get_stats_pihole_history(cfg, log)
         except KeyError as err:
             log.error(cfg, 'Error getting Pi-Hole stats!')
-            log.error.obj(err)
+            log.error.obj(cfg, 'Error:', err)
             time.sleep(1)
             return False
 
