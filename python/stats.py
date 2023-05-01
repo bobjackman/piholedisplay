@@ -78,7 +78,7 @@ class Stats:
             if cfg.options.draw_logo:
                 domains, ads = (None, None)
             else:
-                domains, ads = IO.get_stats_pihole_history(cfg)
+                domains, ads = IO.get_stats_pihole_history(cfg, log)
         except KeyError as err:
             log.error(cfg, 'Error getting Pi-Hole stats!')
             log.error.obj(err)

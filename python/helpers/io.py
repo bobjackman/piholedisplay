@@ -25,30 +25,31 @@ def get_stats_pihole(cfg, log):
 
     Args:
         cfg (DotMap): The configuration.
+        log (Logger): The logger.
 
     Returns:
         tuple: (string, string, string, string): Clients, ads blocked, ads percentage, dns queries.
     '''
-    data = __get_json(cfg.pihole.api_url)
+    data = __get_json(cfg, log, 'summaryRaw')
 
     clients        = data['unique_clients']
     ads_blocked    = data['ads_blocked_today']
     ads_percentage = data['ads_percentage_today']
     dns_queries    = data['dns_queries_today']
 
-    log.debug.obj(cfg, 'API response:', data)
     return (clients, ads_blocked, ads_percentage, dns_queries)
 
-def get_stats_pihole_history(cfg):
+def get_stats_pihole_history(cfg, log):
     '''Get stats for the Pi-Hole instance's history.
 
     Args:
         cfg (DotMap): The configuration.
+        log (Logger): The logger.
 
     Returns:
         tuple: (list, list): Data for domains & ads.
     '''
-    data = __get_json(cfg.pihole.api_url + '?overTimeData10mins')
+    data = __get_json(cfg, log, 'overTimeData10mins')
 
     domains = Collections.dict_to_columns(cfg, data['domains_over_time'])
     ads     = Collections.dict_to_columns(cfg, data['ads_over_time'])
@@ -64,16 +65,29 @@ def read_cfg(module_settings):
     with open('config.json') as json_file:
         config = DotMap(json.load(json_file))
     module_settings.cfg = config
+    
+    with open('api-key.txt') as key_file:
+        key = key_file.readline()
+    module_settings.cfg.pihole.api_key = key
 
 # Private methods
-def __get_json(url):
+def __get_json(cfg, log, query):
     '''Get a `dict` from the specified JSON file.
 
     Args:
-        url (string): The path to the JSON file.
+        cfg (DotMap): The configuration.
+        query (string): The query.
 
     Returns:
         dict: The parsed JSON file.
     '''
-    response = requests.get(url)
-    return json.loads(response.text)
+    log.debug.obj(cfg, 'API request:', cfg.pihole.api_url + '?' + query)
+    log.debug.obj(cfg, 'API key:', cfg.pihole.api_key)
+    
+    response = requests.get(cfg.pihole.api_url + '?' + query + '&auth=' + cfg.pihole.api_key)
+    
+    responseObj = json.loads(response.text);
+    
+    log.debug.obj(cfg, 'API response:', responseObj)
+    
+    return responseObj
