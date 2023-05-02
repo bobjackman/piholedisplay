@@ -74,17 +74,21 @@ class Stats:
     @classmethod
     def __get_stats_pihole(cls, cfg, log):
         try:
-            clients, ads_blocked, ads_percentage, dns_queries = IO.get_stats_pihole(cfg, log)
+            success, clients, ads_blocked, ads_percentage, dns_queries = IO.get_stats_pihole(cfg, log)
             if cfg.options.draw_logo:
-                domains, ads = (None, None)
-            else:
-                domains, ads = IO.get_stats_pihole_history(cfg, log)
+                success, domains, ads = (True, None, None)
+            elif success:
+                success, domains, ads = IO.get_stats_pihole_history(cfg, log)
         except KeyError as err:
             log.error(cfg, 'Error getting Pi-Hole stats!')
             log.error.obj(cfg, 'Error:', err)
             time.sleep(1)
             return False
 
+        if not success:
+            log.error(cfg, 'No success getting Pi-Hole stats!')
+            return False
+            
         log.info(cfg, '''Clients:     {0}
 Ads blocked: {1} {2:.2f}%
 DNS Queries: {3}'''.format(clients, ads_blocked, ads_percentage, dns_queries))
@@ -145,6 +149,13 @@ Disk:         {4} {5}'''.format(ip_address, host, mem, mem_part, disk, disk_part
 
         system = cls.__get_stats_system(cfg, log)
         pihole = cls.__get_stats_pihole(cfg, log)
+        
+        if not pihole:
+            now = time.strftime('%H:%M:%S', time.localtime())
+            log.info(cfg, 'Load failed\nSleeping for 1 min at {0}'.format(now))
+            display.sleep()
+            display.delay_ms(60 * 1000)
+            return True
 
         if cfg.options.draw_logo:
             Renderer.draw_logo(cfg, log, images)

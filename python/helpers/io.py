@@ -28,8 +28,12 @@ def get_stats_pihole(cfg, log):
         log (Logger): The logger.
 
     Returns:
-        tuple: (string, string, string, string): Clients, ads blocked, ads percentage, dns queries.
+        tuple: (boolean, string, string, string, string): Success & Clients, ads blocked, ads percentage, dns queries.
     '''
+    status = __get_json(cfg, log, 'status')    
+    if "FTLnotrunning" in status:
+        return (False, 0, 0, 0, 0)
+        
     data = __get_json(cfg, log, 'summaryRaw')
 
     clients        = data['unique_clients']
@@ -37,7 +41,7 @@ def get_stats_pihole(cfg, log):
     ads_percentage = data['ads_percentage_today']
     dns_queries    = data['dns_queries_today']
 
-    return (clients, ads_blocked, ads_percentage, dns_queries)
+    return (True, clients, ads_blocked, ads_percentage, dns_queries)
 
 def get_stats_pihole_history(cfg, log):
     '''Get stats for the Pi-Hole instance's history.
@@ -47,14 +51,18 @@ def get_stats_pihole_history(cfg, log):
         log (Logger): The logger.
 
     Returns:
-        tuple: (list, list): Data for domains & ads.
+        tuple: (boolean, list, list): Success & Data for domains & ads.
     '''
+    status = __get_json(cfg, log, 'status')    
+    if "FTLnotrunning" in status:
+        return (False, 0, 0)
+        
     data = __get_json(cfg, log, 'overTimeData10mins')
 
     domains = Collections.dict_to_columns(cfg, data['domains_over_time'])
     ads     = Collections.dict_to_columns(cfg, data['ads_over_time'])
 
-    return (domains, ads)
+    return (True, domains, ads)
 
 def read_cfg(module_settings):
     '''Read the configuration from file and store it in `settings`.
@@ -82,7 +90,6 @@ def __get_json(cfg, log, query):
         dict: The parsed JSON file.
     '''
     log.debug.obj(cfg, 'API request:', cfg.pihole.api_url + '?' + query)
-    log.debug.obj(cfg, 'API key:', cfg.pihole.api_key)
     
     response = requests.get(cfg.pihole.api_url + '?' + query + '&auth=' + cfg.pihole.api_key)
     
