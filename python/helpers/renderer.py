@@ -75,6 +75,7 @@ def __draw_chart(color, data, factor):
         factor (float): The factor every entry in the data should be multiplied with.
     '''
     chart_bottom = Display.EPD_WIDTH - 22
+    chart_left = 4
     columns = Collections.div_array(data, factor)
     for i, val in enumerate(columns):
-        color.rectangle((i * 3 + 2, chart_bottom - val, i * 3 + 3, chart_bottom), outline = 0, fill = 1)
+        color.rectangle((i * 3 + chart_left, chart_bottom - val, i * 3 + chart_left + 1, chart_bottom), outline = 0, fill = 1)

@@ -12,10 +12,10 @@
     },
     "chart": {
         "margin": 2,
-        "col_count": 20,
+        "col_count": 24,
         "height": 80.0,
-        "x_stat":   [62, 102],
-        "x_result": [62, 148]
+        "x_stat":   [80, 120],
+        "x_result": [80, 166]
     },
     "labels_ads": [
         "Ads Blocked",

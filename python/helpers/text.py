@@ -34,7 +34,7 @@ class Text:
             label (string): The `label`.
             value (string): The `value`.
         '''
-        pos_y = self.module_settings.current_row * 15
+        pos_y = 5 + self.module_settings.current_row * 15
         self.line(pos_x[0], pos_y,     str(label), True)
         self.line(pos_x[1], pos_y + 1, str(value), False)
         self.module_settings.current_row += 1

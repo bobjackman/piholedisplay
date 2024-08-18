@@ -145,7 +145,7 @@ Disk:         {4} {5}'''.format(ip_address, host, mem, mem_part, disk, disk_part
             red   = Text(settings, draw.red)
         )
 
-        draw.black.rectangle((0, 0, settings.width, settings.height), outline = 0, fill = None)
+        # draw.black.rectangle((0, 0, settings.width, settings.height), outline = 0, fill = None)
 
         system = cls.__get_stats_system(cfg, log)
         pihole = cls.__get_stats_pihole(cfg, log)
