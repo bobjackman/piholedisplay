@@ -3,9 +3,9 @@ Description=pihole stats
 After=syslog.target network.target auditd.service
 
 [Service]
-User=pi
+User=root
 ExecStartPre=/bin/sleep 30
-ExecStart=/home/pi/piholedisplay/start-pihole-stat.sh
+ExecStart=/home/bob/piholedisplay/start-pihole-stat.sh
 
 [Install]
 WantedBy=multi-user.target

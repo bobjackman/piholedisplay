@@ -1,6 +1,6 @@
 {
     "options": {
-        "log_level": 40,
+        "log_level": 30,
         "draw_inverted": true,
         "draw_logo": false,
         "interval_minutes": 10,
