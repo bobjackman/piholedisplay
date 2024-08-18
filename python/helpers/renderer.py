@@ -23,8 +23,8 @@ def frame(display, black, red):
     finalImage = Image.new('RGB', blackRgb.size, color=(255, 255, 255))
     blackChannel = Image.new('RGB', finalImage.size, color=(0, 0, 0))
     redChannel = Image.new('RGB', finalImage.size, color=(255, 0, 0))
-    finalImage.paste(redChannel, (0, 0), ImageOps.invert(red))
     finalImage.paste(blackChannel, (0, 0), ImageOps.invert(black))
+    finalImage.paste(redChannel, (0, 0), ImageOps.invert(red))
     display.display(display.getbuffer(finalImage))
 
 def new_image():
