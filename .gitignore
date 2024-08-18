@@ -1,1 +1,5 @@
 api-key.txt
+python/log/
+python/helpers/__pycache__
+python/lib/__pycache__
+

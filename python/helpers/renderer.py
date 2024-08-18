@@ -1,8 +1,8 @@
 '''The renderer module has several helper functions to render graphs or images to the screen'''
 
-from PIL import Image
+from PIL import Image, ImageOps
 
-import collections as Collections
+import helpers.collections as Collections
 
 from lib import epd2in13b as Display
 

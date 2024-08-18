@@ -6,7 +6,7 @@ import subprocess
 
 from dotmap import DotMap
 
-import collections as Collections
+import helpers.collections as Collections
 
 # Public methods
 def shell(command):
@@ -18,7 +18,7 @@ def shell(command):
     Returns:
         string: The result from the shell command.
     '''
-    return str(subprocess.check_output(command, shell = True)).strip()
+    return subprocess.check_output(command, shell = True).decode('utf-8').strip()
 
 def get_stats_pihole(cfg, log):
     '''Get stats for the Pi-Hole instance.
@@ -91,7 +91,7 @@ def __get_json(cfg, log, query):
     '''
     log.debug.obj(cfg, 'API request:', cfg.pihole.api_url + '?' + query)
     
-    response = requests.get(cfg.pihole.api_url + '?' + query + '&auth=' + cfg.pihole.api_key)
+    response = requests.get(cfg.pihole.api_url + '?' + query + '&auth=' + cfg.pihole.api_key.rstrip())
     
     responseObj = json.loads(response.text);
     
