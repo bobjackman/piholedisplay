@@ -37,7 +37,7 @@ from helpers.text import Text
 from helpers.collections import dot_dict
 from helpers.log import Logger
 
-from lib import epd2in13b as Display
+from lib import epd2in13g as Display
 
 # pylint: disable=too-few-public-methods
 class Stats:

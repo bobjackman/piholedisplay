@@ -4,7 +4,7 @@ from PIL import Image, ImageOps
 
 import helpers.collections as Collections
 
-from lib import epd2in13b as Display
+from lib import epd2in13g as Display
 
 # Public methods
 def frame(display, black, red):
@@ -15,7 +15,17 @@ def frame(display, black, red):
         black (PIL.Image.Image): the background (black) image.
         red (PIL.Image.Image): The foreground (colored) image.
     '''
-    display.display_frame(display.get_frame_buffer(black), display.get_frame_buffer(red))
+    # display.display_frame(display.get_frame_buffer(black), display.get_frame_buffer(red))
+    black = black.convert('L')
+    red = red.convert('L')
+    blackRgb = black.convert('RGB')
+    redRgb = red.convert('RGB')
+    finalImage = Image.new('RGB', blackRgb.size, color=(255, 255, 255))
+    blackChannel = Image.new('RGB', finalImage.size, color=(0, 0, 0))
+    redChannel = Image.new('RGB', finalImage.size, color=(255, 0, 0))
+    finalImage.paste(redChannel, (0, 0), ImageOps.invert(red))
+    finalImage.paste(blackChannel, (0, 0), ImageOps.invert(black))
+    display.display(display.getbuffer(finalImage))
 
 def new_image():
     '''Create a new Image object.
